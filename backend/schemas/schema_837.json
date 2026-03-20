@@ -1,0 +1,786 @@
+{
+  "transaction_name": "Health Care Claim: Professional (837P)",
+  "transaction_code": "837",
+  "segments": {
+    "ISA": {
+      "name": "Interchange Control Header",
+      "elements": {
+        "01": { "name": "Authorization Information Qualifier", "required": true, "len": 2 },
+        "02": { "name": "Authorization Information", "required": true, "len": 10 },
+        "03": { "name": "Security Information Qualifier", "required": true, "len": 2 },
+        "04": { "name": "Security Information", "required": true, "len": 10 },
+        "05": { "name": "Interchange Sender ID Qualifier", "required": true, "len": 2 },
+        "06": { "name": "Interchange Sender ID", "required": true, "len": 15 },
+        "07": { "name": "Interchange Receiver ID Qualifier", "required": true, "len": 2 },
+        "08": { "name": "Interchange Receiver ID", "required": true, "len": 15 },
+        "09": { "name": "Interchange Date", "required": true, "len": 6, "pattern": "^\\d{6}$" },
+        "10": { "name": "Interchange Time", "required": true, "len": 4, "pattern": "^\\d{4}$" },
+        "11": { "name": "Repetition Separator", "required": true, "len": 1 },
+        "12": { "name": "Interchange Control Version Number", "required": true, "len": 5 },
+        "13": { "name": "Interchange Control Number", "required": true, "len": 9 },
+        "14": { "name": "Acknowledgment Requested", "required": true, "len": 1 },
+        "15": { "name": "Interchange Usage Indicator", "required": true, "len": 1 },
+        "16": { "name": "Component Element Separator", "required": true, "len": 1 }
+      }
+    },
+    "GS": {
+      "name": "Functional Group Header",
+      "elements": {
+        "01": { "name": "Functional Identifier Code", "required": true, "len": 2 },
+        "02": { "name": "Application Sender's Code", "required": true, "min_len": 2, "max_len": 15 },
+        "03": { "name": "Application Receiver's Code", "required": true, "min_len": 2, "max_len": 15 },
+        "04": { "name": "Group Date", "required": true, "len": 8, "pattern": "^\\d{8}$" },
+        "05": { "name": "Group Time", "required": true, "min_len": 4, "max_len": 8 },
+        "06": { "name": "Group Control Number", "required": true, "min_len": 1, "max_len": 9 },
+        "07": { "name": "Responsible Agency Code", "required": true, "min_len": 1, "max_len": 2 },
+        "08": { "name": "Version/Release/Industry Identifier Code", "required": true, "min_len": 1, "max_len": 12 }
+      }
+    },
+    "ST": {
+      "name": "Transaction Set Header",
+      "elements": {
+        "01": { "name": "Transaction Set Identifier Code", "required": true, "len": 3 },
+        "02": { "name": "Transaction Set Control Number", "required": true, "min_len": 4, "max_len": 9 },
+        "03": { "name": "Implementation Convention Reference", "required": true, "min_len": 1, "max_len": 35 }
+      }
+    },
+    "BHT": {
+      "name": "Beginning of Hierarchical Transaction",
+      "elements": {
+        "01": { "name": "Hierarchical Structure Code", "required": true, "len": 4 },
+        "02": { "name": "Transaction Set Purpose Code", "required": true, "len": 2 },
+        "03": { "name": "Reference Identification", "required": true, "min_len": 1, "max_len": 50 },
+        "04": { "name": "Transaction Set Creation Date", "required": true, "len": 8, "pattern": "^\\d{8}$" },
+        "05": { "name": "Transaction Set Creation Time", "required": true, "min_len": 4, "max_len": 8 },
+        "06": { "name": "Claim or Encounter Identifier", "required": true, "min_len": 1, "max_len": 2 }
+      },
+      "purpose_codes": {
+        "00": "Original",
+        "18": "Reissue"
+      },
+      "identifier_codes": {
+        "CH": "Chargeable",
+        "RP": "Reporting",
+        "31": "Subrogation Demand"
+      }
+    },
+    "HL": {
+      "name": "Hierarchical Level",
+      "elements": {
+        "01": { "name": "Hierarchical ID Number", "required": true, "min_len": 1, "max_len": 12 },
+        "02": { "name": "Hierarchical Parent ID Number", "min_len": 1, "max_len": 12 },
+        "03": { "name": "Hierarchical Level Code", "required": true, "min_len": 1, "max_len": 2 },
+        "04": { "name": "Hierarchical Child Code", "required": true, "len": 1 }
+      },
+      "level_codes": {
+        "20": "Information Source (Billing Provider)",
+        "22": "Subscriber",
+        "23": "Dependent (Patient)"
+      }
+    },
+    "NM1": {
+      "name": "Individual or Organizational Name",
+      "elements": {
+        "01": { "name": "Entity Identifier Code", "required": true, "min_len": 2, "max_len": 3 },
+        "02": { "name": "Entity Type Qualifier", "required": true, "len": 1 },
+        "03": { "name": "Name Last or Organization Name", "required": true, "min_len": 1, "max_len": 60 },
+        "04": { "name": "Name First", "min_len": 1, "max_len": 35 },
+        "05": { "name": "Name Middle", "min_len": 1, "max_len": 25 },
+        "06": { "name": "Name Prefix", "min_len": 1, "max_len": 10 },
+        "07": { "name": "Name Suffix", "min_len": 1, "max_len": 10 },
+        "08": { "name": "Identification Code Qualifier", "required": true, "min_len": 1, "max_len": 2 },
+        "09": { "name": "Identification Code", "required": true, "min_len": 2, "max_len": 80 }
+      },
+      "entity_codes": {
+        "85": "Billing Provider",
+        "87": "Pay-to Provider",
+        "IL": "Insured/Subscriber",
+        "QC": "Patient",
+        "82": "Rendering Provider",
+        "77": "Service Facility Location",
+        "DN": "Referring Provider",
+        "DK": "Ordering Provider",
+        "DQ": "Supervising Provider",
+        "71": "Attending Provider",
+        "72": "Operating Provider",
+        "73": "Other Operating Provider",
+        "PR": "Payer",
+        "PE": "Payee",
+        "PW": "Billing Service",
+        "45": "Drop-off Location",
+        "40": "Receiver"
+      },
+      "entity_type_qualifiers": {
+        "1": "Person",
+        "2": "Non-Person Entity (Organization)"
+      },
+      "id_code_qualifiers": {
+        "XX": "NPI (National Provider Identifier)",
+        "MI": "Member Identification Number",
+        "PI": "Payer Identification",
+        "46": "ETIN (Electronic Transmitter Identification Number)",
+        "FI": "Federal Taxpayer's Identification Number",
+        "SV": "Service Provider Number",
+        "24": "Employer's Identification Number",
+        "II": "Standard Industry Identifier",
+        "34": "Social Security Number"
+      }
+    },
+    "N3": {
+      "name": "Party Location — Address",
+      "elements": {
+        "01": { "name": "Address Line 1", "required": true, "min_len": 1, "max_len": 55 },
+        "02": { "name": "Address Line 2", "min_len": 1, "max_len": 55 }
+      }
+    },
+    "N4": {
+      "name": "Party Location — City/State/ZIP",
+      "elements": {
+        "01": { "name": "City Name", "required": true, "min_len": 2, "max_len": 30 },
+        "02": { "name": "State or Province Code", "required": true, "len": 2 },
+        "03": { "name": "Postal Code", "required": true, "min_len": 3, "max_len": 15 },
+        "04": { "name": "Country Code", "min_len": 2, "max_len": 3 },
+        "05": { "name": "Location Qualifier", "min_len": 1, "max_len": 2 },
+        "06": { "name": "Location Identifier", "min_len": 1, "max_len": 30 },
+        "07": { "name": "Country Subdivision Code", "min_len": 1, "max_len": 3 }
+      }
+    },
+    "REF": {
+      "name": "Reference Identification",
+      "elements": {
+        "01": { "name": "Reference Identification Qualifier", "required": true, "min_len": 2, "max_len": 3 },
+        "02": { "name": "Reference Identification", "required": true, "min_len": 1, "max_len": 50 },
+        "03": { "name": "Description", "min_len": 1, "max_len": 80 }
+      },
+      "qualifier_codes": {
+        "EI": "Employer Identification Number",
+        "SY": "Social Security Number",
+        "0B": "State License Number",
+        "1G": "Provider UPIN Number",
+        "G2": "Provider Commercial Number",
+        "LU": "Location Number",
+        "EA": "Medical Record Identification Number",
+        "D9": "Claim Number",
+        "F8": "Original Reference Number",
+        "G1": "Prior Authorization Number",
+        "9F": "Referral Number",
+        "X4": "Clinical Laboratory Improvement Amendment Number",
+        "9A": "Repriced Claim Reference Number",
+        "9C": "Adjusted Repriced Claim Reference Number",
+        "T4": "Signal Code",
+        "F5": "Medicare Version Code",
+        "TJ": "Federal Taxpayer's Identification Number",
+        "87": "Functional Category",
+        "CE": "Class of Contract Code",
+        "HPI": "HIPAA National Payer ID"
+      }
+    },
+    "PER": {
+      "name": "Administrative Communications Contact",
+      "elements": {
+        "01": { "name": "Contact Function Code", "required": true, "min_len": 2, "max_len": 2 },
+        "02": { "name": "Contact Name", "min_len": 1, "max_len": 60 },
+        "03": { "name": "Communication Number Qualifier", "min_len": 2, "max_len": 2 },
+        "04": { "name": "Communication Number", "min_len": 1, "max_len": 256 },
+        "05": { "name": "Communication Number Qualifier 2", "min_len": 2, "max_len": 2 },
+        "06": { "name": "Communication Number 2", "min_len": 1, "max_len": 256 },
+        "07": { "name": "Communication Number Qualifier 3", "min_len": 2, "max_len": 2 },
+        "08": { "name": "Communication Number 3", "min_len": 1, "max_len": 256 }
+      },
+      "contact_function_codes": {
+        "IC": "Information Contact",
+        "BI": "Billing Contact"
+      },
+      "comm_qualifiers": {
+        "TE": "Telephone",
+        "FX": "Facsimile",
+        "EM": "Electronic Mail",
+        "EX": "Telephone Extension",
+        "UR": "URL"
+      }
+    },
+    "SBR": {
+      "name": "Subscriber Information",
+      "elements": {
+        "01": { "name": "Payer Responsibility Sequence Number Code", "required": true, "len": 1 },
+        "02": { "name": "Individual Relationship Code", "required": true, "len": 2 },
+        "03": { "name": "Subscriber Group or Policy Number", "min_len": 1, "max_len": 50 },
+        "04": { "name": "Subscriber Group Name", "min_len": 1, "max_len": 60 },
+        "05": { "name": "Insurance Type Code", "min_len": 1, "max_len": 3 },
+        "06": { "name": "Coordination of Benefits Code", "min_len": 1, "max_len": 1 },
+        "07": { "name": "Yes/No Condition or Response Code", "min_len": 1, "max_len": 1 },
+        "08": { "name": "Employment Status Code", "min_len": 1, "max_len": 2 },
+        "09": { "name": "Claim Filing Indicator Code", "min_len": 1, "max_len": 2 }
+      },
+      "payer_responsibility_codes": {
+        "P": "Primary",
+        "S": "Secondary",
+        "T": "Tertiary",
+        "A": "Payer Responsibility Four",
+        "B": "Payer Responsibility Five",
+        "C": "Payer Responsibility Six",
+        "D": "Payer Responsibility Seven",
+        "E": "Payer Responsibility Eight",
+        "F": "Payer Responsibility Nine",
+        "G": "Payer Responsibility Ten",
+        "H": "Payer Responsibility Eleven",
+        "U": "Unknown"
+      },
+      "relationship_codes": {
+        "18": "Self",
+        "01": "Spouse",
+        "19": "Child",
+        "20": "Employee",
+        "21": "Unknown",
+        "39": "Organ Donor",
+        "40": "Cadaver Donor",
+        "53": "Life Partner",
+        "G8": "Other Relationship"
+      },
+      "claim_filing_codes": {
+        "11": "Other Non-Federal Programs",
+        "12": "Preferred Provider Organization (PPO)",
+        "13": "Point of Service (POS)",
+        "14": "Exclusive Provider Organization (EPO)",
+        "15": "Indemnity Insurance",
+        "16": "Health Maintenance Organization (HMO) Medicare Risk",
+        "17": "Dental Maintenance Organization",
+        "AM": "Automobile Medical",
+        "BL": "Blue Cross/Blue Shield",
+        "CH": "Champus (TRICARE)",
+        "CI": "Commercial Insurance Co.",
+        "DS": "Disability",
+        "FI": "Federal Employees Program",
+        "HM": "Health Maintenance Organization",
+        "LM": "Liability Medical",
+        "MA": "Medicare Part A",
+        "MB": "Medicare Part B",
+        "MC": "Medicaid",
+        "OF": "Other Federal Program",
+        "TV": "Title V",
+        "VA": "Veterans Affairs Plan",
+        "WC": "Workers' Compensation Health Claim",
+        "ZZ": "Mutually Defined"
+      }
+    },
+    "PAT": {
+      "name": "Patient Information",
+      "elements": {
+        "01": { "name": "Individual Relationship Code", "required": true, "len": 2 },
+        "02": { "name": "Patient Location Code", "min_len": 1, "max_len": 1 },
+        "03": { "name": "Employment Status Code", "min_len": 1, "max_len": 2 },
+        "04": { "name": "Student Status Code", "min_len": 1, "max_len": 1 },
+        "05": { "name": "Date Time Period Format Qualifier", "min_len": 2, "max_len": 3 },
+        "06": { "name": "Patient Date of Death", "len": 8, "pattern": "^\\d{8}$" },
+        "07": { "name": "Unit or Basis for Measurement Code", "min_len": 1, "max_len": 2 },
+        "08": { "name": "Patient Weight", "min_len": 1, "max_len": 10 },
+        "09": { "name": "Pregnancy Indicator", "len": 1 }
+      },
+      "relationship_codes": {
+        "01": "Spouse",
+        "19": "Child",
+        "20": "Employee",
+        "21": "Unknown",
+        "39": "Organ Donor",
+        "40": "Cadaver Donor",
+        "53": "Life Partner",
+        "G8": "Other Relationship"
+      }
+    },
+    "CLM": {
+      "name": "Claim Information",
+      "elements": {
+        "01": { "name": "Patient Account Number", "required": true, "min_len": 1, "max_len": 38 },
+        "02": { "name": "Total Claim Charge Amount", "required": true, "min_len": 1, "max_len": 18 },
+        "03": { "name": "Claim Filing Indicator Code", "min_len": 1, "max_len": 2 },
+        "04": { "name": "Non-Institutional Claim Type Code", "min_len": 1, "max_len": 2 },
+        "05": { "name": "Health Care Service Location Information", "required": true },
+        "06": { "name": "Provider or Supplier Signature Indicator", "len": 1 },
+        "07": { "name": "Assignment or Plan Participation Code", "len": 1 },
+        "08": { "name": "Benefits Assignment Certification Indicator", "len": 1 },
+        "09": { "name": "Release of Information Code", "required": true, "len": 1 },
+        "10": { "name": "Patient Signature Source Code", "len": 1 },
+        "11": { "name": "Related Causes Information" },
+        "12": { "name": "Special Program Code", "min_len": 2, "max_len": 3 },
+        "20": { "name": "Delay Reason Code", "min_len": 1, "max_len": 2 }
+      },
+      "assignment_codes": {
+        "A": "Assigned",
+        "B": "Assignment Accepted on Clinical Lab Services Only",
+        "C": "Not Assigned"
+      },
+      "release_codes": {
+        "I": "Informed Consent to Release Medical Information for Conditions or Diagnoses",
+        "Y": "Yes, Provider has a Signed Statement Permitting Release of Medical Billing Data"
+      },
+      "special_program_codes": {
+        "02": "Sexually Transmitted Disease",
+        "03": "Family Planning",
+        "05": "Disability",
+        "09": "Second Opinion or Surgery"
+      }
+    },
+    "DTP": {
+      "name": "Date or Time Period",
+      "elements": {
+        "01": { "name": "Date/Time Qualifier", "required": true, "min_len": 3, "max_len": 3 },
+        "02": { "name": "Date Time Period Format Qualifier", "required": true, "min_len": 2, "max_len": 3 },
+        "03": { "name": "Date Time Period", "required": true, "min_len": 1, "max_len": 35 }
+      },
+      "qualifier_codes": {
+        "431": "Onset of Current Illness/Symptom",
+        "454": "Initial Treatment Date",
+        "304": "Latest Visit or Consultation Date",
+        "453": "Acute Manifestation Date",
+        "439": "Accident Date",
+        "484": "Last Menstrual Period Date",
+        "455": "Last X-Ray Date",
+        "471": "Prescription Date",
+        "314": "Disability From Date",
+        "360": "Disability To Date",
+        "297": "Last Worked Date",
+        "296": "Return to Work Date",
+        "435": "Admission Date",
+        "096": "Discharge Date",
+        "090": "Report Start Date",
+        "091": "Report End Date",
+        "472": "Service Date",
+        "232": "Claim Statement Period Start",
+        "233": "Claim Statement Period End",
+        "050": "Received Date",
+        "036": "Expiration Date",
+        "434": "Statement Dates",
+        "438": "Certification Date",
+        "442": "Date of Onset of Similar Condition",
+        "458": "Certification Revision Date",
+        "461": "Last Certification Date",
+        "463": "Last Seen Date",
+        "476": "Peer Review Organization (PRO) Approved Stay Dates",
+        "444": "First Visit/Consultation Date"
+      },
+      "format_qualifiers": {
+        "D8": "Date Expressed in Format CCYYMMDD",
+        "RD8": "Range of Dates (CCYYMMDD-CCYYMMDD)"
+      }
+    },
+    "HI": {
+      "name": "Health Care Diagnosis Code",
+      "elements": {
+        "01": { "name": "Health Care Code Information 1", "required": true },
+        "02": { "name": "Health Care Code Information 2" },
+        "03": { "name": "Health Care Code Information 3" },
+        "04": { "name": "Health Care Code Information 4" },
+        "05": { "name": "Health Care Code Information 5" },
+        "06": { "name": "Health Care Code Information 6" },
+        "07": { "name": "Health Care Code Information 7" },
+        "08": { "name": "Health Care Code Information 8" },
+        "09": { "name": "Health Care Code Information 9" },
+        "10": { "name": "Health Care Code Information 10" },
+        "11": { "name": "Health Care Code Information 11" },
+        "12": { "name": "Health Care Code Information 12" }
+      },
+      "code_list_qualifiers": {
+        "ABK": "ICD-10-CM Principal Diagnosis",
+        "ABF": "ICD-10-CM Diagnosis",
+        "ABJ": "ICD-10-CM Admitting Diagnosis",
+        "APR": "ICD-10-PCS Principal Procedure Code",
+        "ABY": "ICD-10-PCS Procedure Code",
+        "BK": "ICD-9-CM Principal Diagnosis",
+        "BF": "ICD-9-CM Diagnosis",
+        "DR": "Diagnosis Related Group (DRG)",
+        "LOI": "Logical Observation Identifier Names and Codes (LOINC)"
+      }
+    },
+    "SV1": {
+      "name": "Professional Service",
+      "elements": {
+        "01": { "name": "Composite Medical Procedure Identifier", "required": true },
+        "02": { "name": "Line Item Charge Amount", "required": true, "min_len": 1, "max_len": 18 },
+        "03": { "name": "Unit or Basis for Measurement Code", "required": true, "min_len": 1, "max_len": 2 },
+        "04": { "name": "Service Unit Count", "required": true, "min_len": 1, "max_len": 15 },
+        "05": { "name": "Place of Service Code", "min_len": 1, "max_len": 2 },
+        "06": { "name": "Service Type Code", "min_len": 1, "max_len": 2 },
+        "07": { "name": "Composite Diagnosis Code Pointer", "required": true },
+        "09": { "name": "Emergency Indicator", "len": 1 },
+        "11": { "name": "EPSDT Indicator", "len": 1 },
+        "12": { "name": "Family Planning Indicator", "len": 1 },
+        "15": { "name": "Copay Status Code", "len": 1 }
+      },
+      "unit_codes": {
+        "MJ": "Minutes",
+        "UN": "Unit",
+        "DA": "Days",
+        "F2": "International Unit"
+      },
+      "place_of_service_codes": {
+        "01": "Pharmacy",
+        "02": "Telehealth — Provided Other than in Patient's Home",
+        "03": "School",
+        "04": "Homeless Shelter",
+        "05": "Indian Health Service Free-standing Facility",
+        "06": "Indian Health Service Provider-based Facility",
+        "07": "Tribal 638 Free-standing Facility",
+        "08": "Tribal 638 Provider-based Facility",
+        "09": "Prison/Correctional Facility",
+        "10": "Telehealth — Provided in Patient's Home",
+        "11": "Office",
+        "12": "Home",
+        "13": "Assisted Living Facility",
+        "14": "Group Home",
+        "15": "Mobile Unit",
+        "16": "Temporary Lodging",
+        "17": "Walk-in Retail Health Clinic",
+        "18": "Place of Employment/Worksite",
+        "19": "Off Campus – Outpatient Hospital",
+        "20": "Urgent Care Facility",
+        "21": "Inpatient Hospital",
+        "22": "On Campus – Outpatient Hospital",
+        "23": "Emergency Room — Hospital",
+        "24": "Ambulatory Surgical Center",
+        "25": "Birthing Center",
+        "26": "Military Treatment Facility",
+        "31": "Skilled Nursing Facility",
+        "32": "Nursing Facility",
+        "33": "Custodial Care Facility",
+        "34": "Hospice",
+        "41": "Ambulance — Land",
+        "42": "Ambulance — Air or Water",
+        "49": "Independent Clinic",
+        "50": "Federally Qualified Health Center",
+        "51": "Inpatient Psychiatric Facility",
+        "52": "Psychiatric Facility — Partial Hospitalization",
+        "53": "Community Mental Health Center",
+        "54": "Intermediate Care Facility/Individuals with Intellectual Disabilities",
+        "55": "Residential Substance Abuse Treatment Facility",
+        "56": "Psychiatric Residential Treatment Center",
+        "57": "Non-residential Substance Abuse Treatment Facility",
+        "58": "Non-residential Opioid Treatment Facility",
+        "60": "Mass Immunization Center",
+        "61": "Comprehensive Inpatient Rehabilitation Facility",
+        "62": "Comprehensive Outpatient Rehabilitation Facility",
+        "65": "End-Stage Renal Disease Treatment Facility",
+        "71": "State or Local Public Health Clinic",
+        "72": "Rural Health Clinic",
+        "81": "Independent Laboratory",
+        "99": "Other Place of Service"
+      }
+    },
+    "SV2": {
+      "name": "Institutional Service Line",
+      "elements": {
+        "01": { "name": "Revenue Code", "required": true, "min_len": 1, "max_len": 48 },
+        "02": { "name": "Composite Medical Procedure Identifier" },
+        "03": { "name": "Line Item Charge Amount", "required": true, "min_len": 1, "max_len": 18 },
+        "04": { "name": "Unit or Basis for Measurement Code", "min_len": 1, "max_len": 2 },
+        "05": { "name": "Service Unit Count", "min_len": 1, "max_len": 15 },
+        "06": { "name": "Unit Rate", "min_len": 1, "max_len": 15 },
+        "07": { "name": "Non-Covered Charge Amount", "min_len": 1, "max_len": 18 },
+        "09": { "name": "Nursing Home Residential Status Code", "min_len": 1, "max_len": 1 }
+      }
+    },
+    "SV3": {
+      "name": "Dental Service",
+      "elements": {
+        "01": { "name": "Composite Medical Procedure Identifier", "required": true },
+        "02": { "name": "Line Item Charge Amount", "required": true, "min_len": 1, "max_len": 18 },
+        "03": { "name": "Place of Service Code", "min_len": 1, "max_len": 2 },
+        "04": { "name": "Oral Cavity Designation Code" },
+        "05": { "name": "Prosthesis, Crown, or Inlay Code", "len": 1 },
+        "06": { "name": "Service Unit Count", "min_len": 1, "max_len": 15 },
+        "09": { "name": "Diagnosis Code Pointer", "min_len": 1, "max_len": 4 },
+        "11": { "name": "Description", "min_len": 1, "max_len": 80 }
+      }
+    },
+    "DMG": {
+      "name": "Demographic Information",
+      "elements": {
+        "01": { "name": "Date Time Period Format Qualifier", "required": true, "min_len": 2, "max_len": 3 },
+        "02": { "name": "Date of Birth", "required": true, "len": 8, "pattern": "^\\d{8}$" },
+        "03": { "name": "Gender Code", "required": true, "len": 1 },
+        "04": { "name": "Marital Status Code", "len": 1 },
+        "05": { "name": "Composite Race or Ethnicity Information" }
+      },
+      "gender_codes": {
+        "F": "Female",
+        "M": "Male",
+        "U": "Unknown"
+      }
+    },
+    "CR1": {
+      "name": "Ambulance Transport Information",
+      "elements": {
+        "01": { "name": "Unit or Basis for Measurement Code", "min_len": 1, "max_len": 2 },
+        "02": { "name": "Patient Weight", "min_len": 1, "max_len": 10 },
+        "03": { "name": "Ambulance Transport Code", "min_len": 1, "max_len": 1 },
+        "04": { "name": "Ambulance Transport Reason Code", "required": true, "len": 1 },
+        "05": { "name": "Unit or Basis for Measurement Code", "min_len": 1, "max_len": 2 },
+        "06": { "name": "Transport Distance", "min_len": 1, "max_len": 15 },
+        "09": { "name": "Round Trip Purpose Description", "min_len": 1, "max_len": 80 },
+        "10": { "name": "Stretcher Purpose Description", "min_len": 1, "max_len": 80 }
+      },
+      "transport_reason_codes": {
+        "A": "Patient was transported to nearest facility for required treatment",
+        "B": "Patient was transported for the benefit of a preferred physician",
+        "C": "Patient was transported for the nearness of family member",
+        "D": "Patient was transported for the care of specialist or specialized equipment",
+        "E": "Patient was transferred to Rehabilitation Facility"
+      }
+    },
+    "CRC": {
+      "name": "Conditions Indicator",
+      "elements": {
+        "01": { "name": "Code Category", "required": true, "min_len": 2, "max_len": 2 },
+        "02": { "name": "Yes/No Condition or Response Code", "required": true, "len": 1 },
+        "03": { "name": "Condition Indicator 1", "required": true, "min_len": 2, "max_len": 3 },
+        "04": { "name": "Condition Indicator 2", "min_len": 2, "max_len": 3 },
+        "05": { "name": "Condition Indicator 3", "min_len": 2, "max_len": 3 },
+        "06": { "name": "Condition Indicator 4", "min_len": 2, "max_len": 3 },
+        "07": { "name": "Condition Indicator 5", "min_len": 2, "max_len": 3 }
+      },
+      "category_codes": {
+        "07": "Ambulance Certification",
+        "08": "Patient Condition Code: Vision",
+        "11": "Patient Condition Code: EPSDT Referral",
+        "E1": "Condition Codes",
+        "E2": "Condition Codes",
+        "E3": "Condition Codes"
+      }
+    },
+    "PWK": {
+      "name": "Claim Supplemental Information",
+      "elements": {
+        "01": { "name": "Report Type Code", "required": true, "min_len": 2, "max_len": 2 },
+        "02": { "name": "Report Transmission Code", "required": true, "min_len": 1, "max_len": 2 },
+        "05": { "name": "Identification Code Qualifier", "min_len": 1, "max_len": 2 },
+        "06": { "name": "Identification Code", "min_len": 2, "max_len": 80 }
+      },
+      "report_type_codes": {
+        "03": "Report Justifying Treatment Beyond Utilization Guidelines",
+        "04": "Drugs Administered",
+        "05": "Treatment Diagnosis",
+        "06": "Initial Assessment",
+        "07": "Functional Goals",
+        "08": "Plan of Treatment",
+        "09": "Progress Report",
+        "10": "Continued Treatment",
+        "11": "Chemical Analysis",
+        "13": "Certified Test Report",
+        "15": "Justification for Admission",
+        "21": "Recovery Plan",
+        "A3": "Allergies/Sensitivities Document",
+        "A4": "Autopsy Report",
+        "AM": "Ambulance Certification",
+        "AS": "Admission Summary",
+        "B2": "Prescription",
+        "B3": "Physician Order",
+        "B4": "Referral Form",
+        "CT": "Certification",
+        "DA": "Dental Models",
+        "DG": "Diagnostic Report",
+        "DS": "Discharge Summary",
+        "EB": "Explanation of Benefits",
+        "MT": "Models",
+        "NN": "Nursing Notes",
+        "OB": "Operative Note",
+        "OZ": "Support Data for Claim",
+        "P6": "Pathology Report",
+        "PN": "Physical Therapy Notes",
+        "RB": "Radiology Films",
+        "RR": "Radiology Reports",
+        "RT": "Report of Tests and Analysis Report"
+      },
+      "transmission_codes": {
+        "AA": "Available on Request at Provider Site",
+        "AB": "Previously Submitted to Payer",
+        "AD": "Certification Included in this Claim",
+        "AF": "Narrative Segment Included in this Claim",
+        "AG": "No Documentation is Required",
+        "BM": "By Mail",
+        "EL": "Electronically Only",
+        "EM": "E-Mail",
+        "FT": "File Transfer",
+        "FX": "By Fax"
+      }
+    },
+    "CN1": {
+      "name": "Contract Information",
+      "elements": {
+        "01": { "name": "Contract Type Code", "required": true, "len": 2 },
+        "02": { "name": "Monetary Amount", "min_len": 1, "max_len": 18 },
+        "03": { "name": "Percent of Discount/Markup", "min_len": 1, "max_len": 6 },
+        "04": { "name": "Reference Identification", "min_len": 1, "max_len": 50 },
+        "05": { "name": "Terms Discount Percent", "min_len": 1, "max_len": 6 },
+        "06": { "name": "Version Identifier", "min_len": 1, "max_len": 30 }
+      },
+      "contract_type_codes": {
+        "01": "Diagnosis Related Group (DRG)",
+        "02": "Per Diem",
+        "03": "Variable Per Diem",
+        "04": "Flat",
+        "05": "Capitated",
+        "06": "Percent",
+        "09": "Other"
+      }
+    },
+    "OI": {
+      "name": "Other Insurance Coverage Information",
+      "elements": {
+        "01": { "name": "Claim Filing Indicator Code", "min_len": 1, "max_len": 2 },
+        "02": { "name": "Claim Submission Reason Code", "min_len": 2, "max_len": 2 },
+        "03": { "name": "Benefits Assignment Certification Indicator", "required": true, "len": 1 },
+        "04": { "name": "Patient Signature Source Code", "len": 1 },
+        "06": { "name": "Release of Information Code", "required": true, "len": 1 }
+      }
+    },
+    "SVD": {
+      "name": "Line Adjudication Information",
+      "elements": {
+        "01": { "name": "Identification Code", "required": true, "min_len": 2, "max_len": 80 },
+        "02": { "name": "Service Line Paid Amount", "required": true, "min_len": 1, "max_len": 18 },
+        "03": { "name": "Composite Medical Procedure Identifier" },
+        "04": { "name": "Product/Service ID", "min_len": 1, "max_len": 48 },
+        "05": { "name": "Paid Service Unit Count", "min_len": 1, "max_len": 15 },
+        "06": { "name": "Bundled or Unbundled Line Number", "min_len": 1, "max_len": 6 }
+      }
+    },
+    "CAS": {
+      "name": "Claims Adjustment",
+      "elements": {
+        "01": { "name": "Claim Adjustment Group Code", "required": true, "min_len": 1, "max_len": 2 },
+        "02": { "name": "Claim Adjustment Reason Code", "required": true, "min_len": 1, "max_len": 5 },
+        "03": { "name": "Claim Adjustment Amount", "required": true, "min_len": 1, "max_len": 18 },
+        "04": { "name": "Claim Adjustment Quantity", "min_len": 1, "max_len": 15 },
+        "05": { "name": "Claim Adjustment Reason Code 2", "min_len": 1, "max_len": 5 },
+        "06": { "name": "Claim Adjustment Amount 2", "min_len": 1, "max_len": 18 },
+        "07": { "name": "Claim Adjustment Quantity 2", "min_len": 1, "max_len": 15 },
+        "08": { "name": "Claim Adjustment Reason Code 3", "min_len": 1, "max_len": 5 },
+        "09": { "name": "Claim Adjustment Amount 3", "min_len": 1, "max_len": 18 },
+        "10": { "name": "Claim Adjustment Quantity 3", "min_len": 1, "max_len": 15 },
+        "11": { "name": "Claim Adjustment Reason Code 4", "min_len": 1, "max_len": 5 },
+        "12": { "name": "Claim Adjustment Amount 4", "min_len": 1, "max_len": 18 },
+        "13": { "name": "Claim Adjustment Quantity 4", "min_len": 1, "max_len": 15 },
+        "14": { "name": "Claim Adjustment Reason Code 5", "min_len": 1, "max_len": 5 },
+        "15": { "name": "Claim Adjustment Amount 5", "min_len": 1, "max_len": 18 },
+        "16": { "name": "Claim Adjustment Quantity 5", "min_len": 1, "max_len": 15 },
+        "17": { "name": "Claim Adjustment Reason Code 6", "min_len": 1, "max_len": 5 },
+        "18": { "name": "Claim Adjustment Amount 6", "min_len": 1, "max_len": 18 },
+        "19": { "name": "Claim Adjustment Quantity 6", "min_len": 1, "max_len": 15 }
+      },
+      "group_codes": {
+        "CO": "Contractual Obligations",
+        "CR": "Corrections and Reversals",
+        "OA": "Other Adjustments",
+        "PI": "Payer Initiated Reductions",
+        "PR": "Patient Responsibility"
+      },
+      "reason_codes": {
+        "1": "Deductible Amount",
+        "2": "Coinsurance Amount",
+        "3": "Co-payment Amount",
+        "4": "The procedure code is inconsistent with the modifier used",
+        "5": "The procedure code/bill type is inconsistent with the place of service",
+        "6": "The procedure/revenue code is inconsistent with the patient's age",
+        "7": "The procedure/revenue code is inconsistent with the patient's gender",
+        "9": "The diagnosis is inconsistent with the patient's age",
+        "10": "The diagnosis is inconsistent with the patient's gender",
+        "11": "The diagnosis is inconsistent with the procedure",
+        "16": "Claim/service lacks information or has submission/billing error(s)",
+        "18": "Exact duplicate claim/service",
+        "22": "This care may be covered by another payer per coordination of benefits",
+        "23": "The impact of prior payer(s) adjudication including payments and/or adjustments",
+        "24": "Charges are covered under a capitation agreement/managed care plan",
+        "26": "Expenses incurred prior to coverage",
+        "27": "Expenses incurred after coverage terminated",
+        "29": "The time limit for filing has expired",
+        "31": "Patient cannot be identified as our insured",
+        "35": "Lifetime benefit maximum has been reached",
+        "39": "Services denied at the time authorization/pre-certification was requested",
+        "45": "Charge exceeds fee schedule/maximum allowable or contracted/legislated fee arrangement",
+        "49": "This is a non-covered service because it is a routine/preventive exam",
+        "50": "These are non-covered services because this is not deemed a medical necessity",
+        "96": "Non-covered charge(s)",
+        "97": "The benefit for this service is included in the payment/allowance for another service/procedure",
+        "100": "Payment made to patient/insured/responsible party",
+        "107": "The related or qualifying claim/service was not identified on this claim",
+        "109": "Claim Not Covered by This Payer/Contractor",
+        "119": "Benefit maximum for this time period or occurrence has been reached",
+        "197": "Precertification/authorization/notification absent",
+        "204": "This service/equipment/drug is not covered under the patient's current benefit plan",
+        "242": "Services not provided by network/primary care providers"
+      }
+    },
+    "MOA": {
+      "name": "Outpatient Adjudication Information",
+      "elements": {
+        "01": { "name": "Reimbursement Rate", "min_len": 1, "max_len": 9 },
+        "02": { "name": "Claim HCPCS Payable Amount", "min_len": 1, "max_len": 18 },
+        "03": { "name": "Claim Payment Remark Code 1", "min_len": 1, "max_len": 5 },
+        "04": { "name": "Claim Payment Remark Code 2", "min_len": 1, "max_len": 5 },
+        "05": { "name": "Claim Payment Remark Code 3", "min_len": 1, "max_len": 5 },
+        "06": { "name": "Claim Payment Remark Code 4", "min_len": 1, "max_len": 5 },
+        "07": { "name": "Claim Payment Remark Code 5", "min_len": 1, "max_len": 5 },
+        "08": { "name": "End-Stage Renal Disease Payment Amount", "min_len": 1, "max_len": 18 },
+        "09": { "name": "Non-Payable Professional Component Amount", "min_len": 1, "max_len": 18 }
+      }
+    },
+    "LQ": {
+      "name": "Healthcare Remark Code",
+      "elements": {
+        "01": { "name": "Code List Qualifier Code", "required": true, "min_len": 2, "max_len": 3 },
+        "02": { "name": "Remark Code", "required": true, "min_len": 1, "max_len": 30 }
+      },
+      "qualifier_codes": {
+        "HE": "Claim Payment Remark Code",
+        "RX": "National Council for Prescription Drug Programs Reject/Payment Code"
+      }
+    },
+    "LX": {
+      "name": "Transaction Set Line Number",
+      "elements": {
+        "01": { "name": "Assigned Number", "required": true, "min_len": 1, "max_len": 6 }
+      }
+    },
+    "AMT": {
+      "name": "Monetary Amount Information",
+      "elements": {
+        "01": { "name": "Amount Qualifier Code", "required": true, "min_len": 1, "max_len": 3 },
+        "02": { "name": "Monetary Amount", "required": true, "min_len": 1, "max_len": 18 },
+        "03": { "name": "Credit/Debit Flag Code", "len": 1 }
+      },
+      "qualifier_codes": {
+        "F5": "Patient Amount Paid",
+        "T": "Tax",
+        "T2": "Total Claim Before Taxes",
+        "AU": "Coverage Amount",
+        "D": "Discount Amount",
+        "A8": "Noncovered Charges-Actual",
+        "AAE": "Payer Amount Paid",
+        "EAF": "Amount Owed",
+        "NL": "Net Worth",
+        "I": "Interest",
+        "B6": "Allowed - Actual"
+      }
+    },
+    "SE": {
+      "name": "Transaction Set Trailer",
+      "elements": {
+        "01": { "name": "Number of Included Segments", "required": true, "min_len": 1, "max_len": 10 },
+        "02": { "name": "Transaction Set Control Number", "required": true, "min_len": 4, "max_len": 9 }
+      }
+    },
+    "GE": {
+      "name": "Functional Group Trailer",
+      "elements": {
+        "01": { "name": "Number of Transaction Sets Included", "required": true, "min_len": 1, "max_len": 6 },
+        "02": { "name": "Group Control Number", "required": true, "min_len": 1, "max_len": 9 }
+      }
+    },
+    "IEA": {
+      "name": "Interchange Control Trailer",
+      "elements": {
+        "01": { "name": "Number of Included Functional Groups", "required": true, "min_len": 1, "max_len": 5 },
+        "02": { "name": "Interchange Control Number", "required": true, "len": 9 }
+      }
+    }
+  }
+}

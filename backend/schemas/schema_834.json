@@ -1,0 +1,667 @@
+{
+  "transaction_name": "Benefit Enrollment and Maintenance (834)",
+  "transaction_code": "834",
+  "segments": {
+    "ISA": {
+      "name": "Interchange Control Header",
+      "elements": {
+        "01": { "name": "Authorization Information Qualifier", "required": true, "len": 2 },
+        "02": { "name": "Authorization Information", "required": true, "len": 10 },
+        "03": { "name": "Security Information Qualifier", "required": true, "len": 2 },
+        "04": { "name": "Security Information", "required": true, "len": 10 },
+        "05": { "name": "Interchange Sender ID Qualifier", "required": true, "len": 2 },
+        "06": { "name": "Interchange Sender ID", "required": true, "len": 15 },
+        "07": { "name": "Interchange Receiver ID Qualifier", "required": true, "len": 2 },
+        "08": { "name": "Interchange Receiver ID", "required": true, "len": 15 },
+        "09": { "name": "Interchange Date", "required": true, "len": 6, "pattern": "^\\d{6}$" },
+        "10": { "name": "Interchange Time", "required": true, "len": 4, "pattern": "^\\d{4}$" },
+        "11": { "name": "Repetition Separator", "required": true, "len": 1 },
+        "12": { "name": "Interchange Control Version Number", "required": true, "len": 5 },
+        "13": { "name": "Interchange Control Number", "required": true, "len": 9 },
+        "14": { "name": "Acknowledgment Requested", "required": true, "len": 1 },
+        "15": { "name": "Interchange Usage Indicator", "required": true, "len": 1 },
+        "16": { "name": "Component Element Separator", "required": true, "len": 1 }
+      }
+    },
+    "GS": {
+      "name": "Functional Group Header",
+      "elements": {
+        "01": { "name": "Functional Identifier Code", "required": true, "len": 2 },
+        "02": { "name": "Application Sender's Code", "required": true, "min_len": 2, "max_len": 15 },
+        "03": { "name": "Application Receiver's Code", "required": true, "min_len": 2, "max_len": 15 },
+        "04": { "name": "Group Date", "required": true, "len": 8, "pattern": "^\\d{8}$" },
+        "05": { "name": "Group Time", "required": true, "min_len": 4, "max_len": 8 },
+        "06": { "name": "Group Control Number", "required": true, "min_len": 1, "max_len": 9 },
+        "07": { "name": "Responsible Agency Code", "required": true, "min_len": 1, "max_len": 2 },
+        "08": { "name": "Version/Release/Industry Identifier Code", "required": true, "min_len": 1, "max_len": 12 }
+      }
+    },
+    "ST": {
+      "name": "Transaction Set Header",
+      "elements": {
+        "01": { "name": "Transaction Set Identifier Code", "required": true, "len": 3 },
+        "02": { "name": "Transaction Set Control Number", "required": true, "min_len": 4, "max_len": 9 },
+        "03": { "name": "Implementation Convention Reference", "min_len": 1, "max_len": 35 }
+      }
+    },
+    "BGN": {
+      "name": "Beginning Segment",
+      "elements": {
+        "01": { "name": "Transaction Set Purpose Code", "required": true, "len": 2 },
+        "02": { "name": "Reference Identification", "required": true, "min_len": 1, "max_len": 50 },
+        "03": { "name": "Date", "required": true, "len": 8, "pattern": "^\\d{8}$" },
+        "04": { "name": "Time", "min_len": 4, "max_len": 8 },
+        "05": { "name": "Time Code", "min_len": 2, "max_len": 2 },
+        "06": { "name": "Reference Identification 2", "min_len": 1, "max_len": 50 },
+        "07": { "name": "Transaction Type Code", "min_len": 2, "max_len": 2 },
+        "08": { "name": "Action Code", "required": true, "min_len": 1, "max_len": 2 }
+      },
+      "purpose_codes": {
+        "00": "Original",
+        "15": "Re-Submission",
+        "22": "Information Copy"
+      },
+      "action_codes": {
+        "1": "Verify",
+        "2": "Change",
+        "4": "Replace",
+        "RX": "Replace Specified Subscribers Only"
+      }
+    },
+    "DTP": {
+      "name": "Date or Time Period",
+      "elements": {
+        "01": { "name": "Date/Time Qualifier", "required": true, "min_len": 3, "max_len": 3 },
+        "02": { "name": "Date Time Period Format Qualifier", "required": true, "min_len": 2, "max_len": 3 },
+        "03": { "name": "Date Time Period", "required": true, "min_len": 1, "max_len": 35 }
+      },
+      "qualifier_codes": {
+        "007": "Effective Date",
+        "050": "Received Date",
+        "286": "Retirement Date",
+        "296": "Return to Work Date",
+        "297": "Last Worked Date",
+        "300": "Enrollment Signature Date",
+        "301": "Plan Begin Date",
+        "303": "Maintenance Effective Date",
+        "336": "Employment Begin Date",
+        "337": "Employment End Date",
+        "338": "Medicare Begin Date",
+        "339": "Medicare End Date",
+        "340": "COBRA Begin Date",
+        "341": "COBRA End Date",
+        "348": "Benefit Begin Date",
+        "349": "Benefit End Date",
+        "350": "Credit Begin Date",
+        "351": "Credit End Date",
+        "356": "Eligibility Begin Date",
+        "357": "Eligibility End Date",
+        "383": "Hire Date",
+        "385": "Adjusted Hire Date",
+        "386": "Created Date",
+        "393": "Date of Last Update",
+        "394": "Date Qualifier",
+        "473": "Member Effective Date",
+        "474": "Member Expiration Date"
+      },
+      "format_qualifiers": {
+        "D8": "Date Expressed in Format CCYYMMDD",
+        "RD8": "Range of Dates (CCYYMMDD-CCYYMMDD)"
+      }
+    },
+    "QTY": {
+      "name": "Quantity Information",
+      "elements": {
+        "01": { "name": "Quantity Qualifier", "required": true, "min_len": 2, "max_len": 2 },
+        "02": { "name": "Quantity", "required": true, "min_len": 1, "max_len": 15 },
+        "03": { "name": "Composite Unit of Measure" }
+      },
+      "qualifier_codes": {
+        "DT": "Dependent Total",
+        "ET": "Employee Total",
+        "TO": "Total"
+      }
+    },
+    "N1": {
+      "name": "Party Identification",
+      "elements": {
+        "01": { "name": "Entity Identifier Code", "required": true, "min_len": 2, "max_len": 3 },
+        "02": { "name": "Name", "required": true, "min_len": 1, "max_len": 60 },
+        "03": { "name": "Identification Code Qualifier", "min_len": 1, "max_len": 2 },
+        "04": { "name": "Identification Code", "min_len": 2, "max_len": 80 },
+        "05": { "name": "Entity Relationship Code", "min_len": 2, "max_len": 2 },
+        "06": { "name": "Entity Identifier Code 2", "min_len": 2, "max_len": 3 }
+      },
+      "entity_codes": {
+        "P5": "Plan Sponsor",
+        "IN": "Insurer",
+        "BO": "Broker or Sales Office",
+        "TV": "Third-Party Administrator",
+        "GW": "Group/Sponsor",
+        "94": "Organization Completing Configuration Change"
+      },
+      "id_code_qualifiers": {
+        "FI": "Federal Taxpayer's Identification Number",
+        "XV": "Health Care Financing Admin. National Plan ID",
+        "24": "Employer's Identification Number",
+        "34": "Social Security Number",
+        "46": "ETIN (Electronic Transmitter Identification Number)",
+        "94": "Code assigned by the organization that is the ultimate destination of the transaction set"
+      }
+    },
+    "NM1": {
+      "name": "Individual or Organizational Name",
+      "elements": {
+        "01": { "name": "Entity Identifier Code", "required": true, "min_len": 2, "max_len": 3 },
+        "02": { "name": "Entity Type Qualifier", "required": true, "len": 1 },
+        "03": { "name": "Name Last or Organization Name", "required": true, "min_len": 1, "max_len": 60 },
+        "04": { "name": "Name First", "min_len": 1, "max_len": 35 },
+        "05": { "name": "Name Middle", "min_len": 1, "max_len": 25 },
+        "06": { "name": "Name Prefix", "min_len": 1, "max_len": 10 },
+        "07": { "name": "Name Suffix", "min_len": 1, "max_len": 10 },
+        "08": { "name": "Identification Code Qualifier", "required": true, "min_len": 1, "max_len": 2 },
+        "09": { "name": "Identification Code", "required": true, "min_len": 2, "max_len": 80 }
+      },
+      "entity_codes": {
+        "IL": "Insured/Subscriber",
+        "70": "Prior Incorrect Insured/Subscriber",
+        "31": "Postal Mailing Address",
+        "36": "Employer",
+        "GW": "Group/Sponsor",
+        "P5": "Plan Sponsor",
+        "IN": "Insurer",
+        "QD": "Responsible Party",
+        "S3": "Custodial Parent",
+        "6Y": "Case Manager",
+        "74": "Corrected Insured",
+        "DQ": "Supervising Provider",
+        "E1": "Person or Other Entity Legally Responsible for the Minor",
+        "EI": "Executor of Estate",
+        "EXS": "Ex-Spouse"
+      },
+      "entity_type_qualifiers": {
+        "1": "Person",
+        "2": "Non-Person Entity (Organization)"
+      },
+      "id_code_qualifiers": {
+        "34": "Social Security Number",
+        "ZZ": "Mutually Defined",
+        "MI": "Member Identification Number",
+        "FI": "Federal Taxpayer's Identification Number",
+        "24": "Employer's Identification Number",
+        "II": "Standard Industry Identifier"
+      }
+    },
+    "N3": {
+      "name": "Party Location — Address",
+      "elements": {
+        "01": { "name": "Address Line 1", "required": true, "min_len": 1, "max_len": 55 },
+        "02": { "name": "Address Line 2", "min_len": 1, "max_len": 55 }
+      }
+    },
+    "N4": {
+      "name": "Party Location — City/State/ZIP",
+      "elements": {
+        "01": { "name": "City Name", "required": true, "min_len": 2, "max_len": 30 },
+        "02": { "name": "State or Province Code", "required": true, "len": 2 },
+        "03": { "name": "Postal Code", "required": true, "min_len": 3, "max_len": 15 },
+        "04": { "name": "Country Code", "min_len": 2, "max_len": 3 },
+        "05": { "name": "Location Qualifier", "min_len": 1, "max_len": 2 },
+        "06": { "name": "Location Identifier", "min_len": 1, "max_len": 30 },
+        "07": { "name": "Country Subdivision Code", "min_len": 1, "max_len": 3 }
+      }
+    },
+    "DMG": {
+      "name": "Demographic Information",
+      "elements": {
+        "01": { "name": "Date Time Period Format Qualifier", "required": true, "min_len": 2, "max_len": 3 },
+        "02": { "name": "Date of Birth", "required": true, "len": 8, "pattern": "^\\d{8}$" },
+        "03": { "name": "Gender Code", "required": true, "len": 1 },
+        "04": { "name": "Marital Status Code", "len": 1 },
+        "05": { "name": "Composite Race or Ethnicity Information" },
+        "06": { "name": "Citizenship Status Code", "min_len": 1, "max_len": 2 },
+        "07": { "name": "Country Code", "min_len": 2, "max_len": 3 },
+        "08": { "name": "Basis of Verification Code", "min_len": 1, "max_len": 2 },
+        "09": { "name": "Quantity", "min_len": 1, "max_len": 15 },
+        "10": { "name": "Code List Qualifier Code", "min_len": 1, "max_len": 3 },
+        "11": { "name": "Industry Code", "min_len": 1, "max_len": 30 }
+      },
+      "gender_codes": {
+        "F": "Female",
+        "M": "Male",
+        "U": "Unknown"
+      },
+      "marital_status_codes": {
+        "B": "Registered Domestic Partner",
+        "D": "Divorced",
+        "I": "Single",
+        "K": "Unknown",
+        "M": "Married",
+        "R": "Unreported",
+        "S": "Separated",
+        "U": "Unmarried (includes single, divorced, widowed)",
+        "W": "Widowed",
+        "X": "Legally Separated"
+      },
+      "citizenship_codes": {
+        "1": "US Citizen",
+        "2": "Non-Resident Alien",
+        "3": "Resident Alien",
+        "4": "Illegal Alien",
+        "5": "Alien",
+        "6": "US Citizen — Non-Resident",
+        "7": "US Resident"
+      }
+    },
+    "HD": {
+      "name": "Health Coverage",
+      "elements": {
+        "01": { "name": "Maintenance Type Code", "required": true, "min_len": 3, "max_len": 3 },
+        "02": { "name": "Maintenance Reason Code", "min_len": 2, "max_len": 5 },
+        "03": { "name": "Insurance Line Code", "required": true, "min_len": 2, "max_len": 3 },
+        "04": { "name": "Plan Coverage Description", "min_len": 1, "max_len": 50 },
+        "05": { "name": "Coverage Level Code", "min_len": 3, "max_len": 3 }
+      },
+      "maintenance_codes": {
+        "001": "Change",
+        "021": "Addition",
+        "024": "Cancellation or Termination",
+        "025": "Reinstatement",
+        "026": "Correction",
+        "028": "Notification Only",
+        "030": "Audit or Compare",
+        "032": "Employee Information Not Applicable"
+      },
+      "maintenance_reason_codes": {
+        "01": "Divorce",
+        "02": "Birth",
+        "03": "Adoption",
+        "04": "Death",
+        "05": "Retirement",
+        "06": "Overage Dependent",
+        "07": "End of Premium Waiver",
+        "08": "Strike or Lockout",
+        "09": "Separation of Employment",
+        "10": "Leave of Absence",
+        "11": "Return from Leave of Absence",
+        "14": "Initial Enrollment",
+        "15": "ACA — Individual Family Tax File",
+        "18": "Medicare Part D",
+        "20": "Other",
+        "25": "Annual Reelection",
+        "28": "Initial Enrollment Late",
+        "29": "Open Enrollment",
+        "31": "Termination of Benefits",
+        "32": "Loss of Minimum Essential Coverage",
+        "33": "Becoming Eligible for Medicare",
+        "EC": "Employer Change",
+        "XN": "Notification Only"
+      },
+      "insurance_line_codes": {
+        "AG": "Preventive Care/Wellness",
+        "AH": "24 Hour Care",
+        "AJ": "Mental Health",
+        "AK": "Substance Abuse",
+        "DEN": "Dental",
+        "FAC": "Facility",
+        "HE": "Hearing",
+        "HLT": "Health",
+        "HMO": "Health Maintenance Organization",
+        "LTC": "Long Term Care",
+        "LTD": "Long Term Disability",
+        "MM": "Major Medical",
+        "MOD": "Mail Order Drug",
+        "PDG": "Prescription Drug",
+        "POS": "Point of Service",
+        "PPO": "Preferred Provider Organization",
+        "PRA": "Practitioners",
+        "STD": "Short Term Disability",
+        "UR": "Utilization Review",
+        "VIS": "Vision"
+      },
+      "coverage_level_codes": {
+        "CHD": "Children Only",
+        "DEP": "Dependents Only",
+        "E1D": "Employee and One Dependent",
+        "E2D": "Employee and Two Dependents",
+        "E3D": "Employee and Three or More Dependents",
+        "ECH": "Employee and Children",
+        "EMP": "Employee Only",
+        "ESP": "Employee and Spouse",
+        "FAM": "Family",
+        "IND": "Individual",
+        "SPC": "Spouse and Children",
+        "SPO": "Spouse Only",
+        "TWO": "Two Party"
+      }
+    },
+    "INS": {
+      "name": "Member Level Detail",
+      "elements": {
+        "01": { "name": "Yes/No Condition (Insured Indicator)", "required": true, "len": 1 },
+        "02": { "name": "Individual Relationship Code", "required": true, "len": 2 },
+        "03": { "name": "Maintenance Type Code", "required": true, "len": 3 },
+        "04": { "name": "Maintenance Reason Code", "min_len": 2, "max_len": 5 },
+        "05": { "name": "Benefit Status Code", "len": 1 },
+        "06": { "name": "Medicare Status Code" },
+        "07": { "name": "Consolidated Omnibus Budget Reconciliation Act (COBRA) Qualifying Event Code", "min_len": 1, "max_len": 2 },
+        "08": { "name": "Employment Status Code", "required": true, "min_len": 1, "max_len": 2 },
+        "09": { "name": "Student Status Code", "len": 1 },
+        "10": { "name": "Yes/No Condition (Handicap Indicator)", "len": 1 },
+        "11": { "name": "Date Time Period Format Qualifier", "min_len": 2, "max_len": 3 },
+        "12": { "name": "Member Individual Death Date", "len": 8, "pattern": "^\\d{8}$" },
+        "13": { "name": "Confidentiality Code", "len": 1 },
+        "17": { "name": "Birth Sequence Number", "min_len": 1, "max_len": 9 }
+      },
+      "insured_indicator": {
+        "Y": "Yes — Subscriber/Insured",
+        "N": "No — Dependent"
+      },
+      "relationship_codes": {
+        "01": "Spouse",
+        "03": "Father or Mother",
+        "04": "Grandfather or Grandmother",
+        "05": "Grandson or Granddaughter",
+        "06": "Uncle or Aunt",
+        "07": "Nephew or Niece",
+        "08": "Cousin",
+        "09": "Adopted Child",
+        "10": "Foster Child",
+        "11": "Son-in-Law or Daughter-in-Law",
+        "12": "Brother-in-Law or Sister-in-Law",
+        "13": "Mother-in-Law or Father-in-Law",
+        "14": "Brother or Sister",
+        "15": "Ward",
+        "16": "Stepparent",
+        "17": "Stepchild",
+        "18": "Self",
+        "19": "Child",
+        "20": "Employee",
+        "21": "Unknown",
+        "22": "Handicapped/Dependent",
+        "23": "Sponsored Dependent",
+        "24": "Dependent of a Minor Dependent",
+        "25": "Significant Other",
+        "26": "Mother",
+        "27": "Father",
+        "28": "Emancipated Minor",
+        "29": "Organ Donor",
+        "30": "Cadaver Donor",
+        "31": "Injured Plaintiff",
+        "32": "Child — Custody of Father",
+        "33": "Child — Custody of Mother",
+        "34": "Child — Joint Custody",
+        "36": "Life Partner",
+        "38": "Collateral Dependent",
+        "39": "Organ Donor",
+        "40": "Cadaver Donor",
+        "41": "Injured Plaintiff",
+        "43": "Child — Single Father Custody",
+        "53": "Life Partner",
+        "G8": "Other Relationship",
+        "60": "Annuitant",
+        "D2": "Trustee"
+      },
+      "maintenance_type_codes": {
+        "001": "Change",
+        "021": "Addition",
+        "024": "Cancellation or Termination",
+        "025": "Reinstatement",
+        "026": "Correction",
+        "030": "Audit or Compare"
+      },
+      "benefit_status_codes": {
+        "A": "Active",
+        "C": "COBRA",
+        "S": "Surviving Insured",
+        "T": "TEFRA Qualifying Event"
+      },
+      "employment_status_codes": {
+        "AC": "Active",
+        "AO": "Active Military — Overseas",
+        "AU": "Active Military — USA",
+        "FT": "Full-Time",
+        "L1": "Leave of Absence",
+        "PT": "Part-Time",
+        "RT": "Retired",
+        "TE": "Terminated"
+      },
+      "cobra_qualifying_events": {
+        "1": "Termination",
+        "2": "Reduction in Hours",
+        "3": "Medicare",
+        "4": "Death",
+        "5": "Divorce or Legal Separation",
+        "6": "Dependent Ceasing to be a Dependent",
+        "7": "Bankruptcy",
+        "8": "Layoff",
+        "9": "Leave of Absence",
+        "ZZ": "Mutually Defined"
+      },
+      "student_status_codes": {
+        "F": "Full-Time",
+        "N": "Not a Student",
+        "P": "Part-Time"
+      }
+    },
+    "REF": {
+      "name": "Reference Identification",
+      "elements": {
+        "01": { "name": "Reference Identification Qualifier", "required": true, "min_len": 2, "max_len": 3 },
+        "02": { "name": "Reference Identification", "required": true, "min_len": 1, "max_len": 50 },
+        "03": { "name": "Description", "min_len": 1, "max_len": 80 }
+      },
+      "qualifier_codes": {
+        "0F": "Subscriber Number",
+        "1L": "Group or Policy Number",
+        "17": "Client Reporting Category",
+        "23": "Client Number",
+        "3H": "Case Number",
+        "ABB": "Personal Identification Number (PIN)",
+        "DX": "Department/Agency Number",
+        "ZZ": "Mutually Defined",
+        "60": "Account Suffix Code",
+        "6O": "Cross Reference Number",
+        "CE": "Class of Contract Code",
+        "E8": "Medical Record Identification Number",
+        "GH": "Identification Card Serial Number",
+        "HJ": "Identity Card Number",
+        "IF": "Issue Number",
+        "IG": "Insurance Policy Number",
+        "SY": "Social Security Number",
+        "QQ": "Unit Number"
+      }
+    },
+    "PER": {
+      "name": "Administrative Communications Contact",
+      "elements": {
+        "01": { "name": "Contact Function Code", "required": true, "min_len": 2, "max_len": 2 },
+        "02": { "name": "Contact Name", "min_len": 1, "max_len": 60 },
+        "03": { "name": "Communication Number Qualifier", "min_len": 2, "max_len": 2 },
+        "04": { "name": "Communication Number", "min_len": 1, "max_len": 256 },
+        "05": { "name": "Communication Number Qualifier 2", "min_len": 2, "max_len": 2 },
+        "06": { "name": "Communication Number 2", "min_len": 1, "max_len": 256 },
+        "07": { "name": "Communication Number Qualifier 3", "min_len": 2, "max_len": 2 },
+        "08": { "name": "Communication Number 3", "min_len": 1, "max_len": 256 }
+      },
+      "contact_function_codes": {
+        "IC": "Information Contact",
+        "IP": "Insured Party",
+        "HP": "Home Phone Number"
+      },
+      "comm_qualifiers": {
+        "TE": "Telephone",
+        "FX": "Facsimile",
+        "EM": "Electronic Mail",
+        "EX": "Telephone Extension",
+        "HP": "Home Phone Number",
+        "WP": "Work Phone Number",
+        "AP": "Alternate Phone",
+        "CP": "Cellular Phone",
+        "UR": "URL"
+      }
+    },
+    "LX": {
+      "name": "Transaction Set Line Number",
+      "elements": {
+        "01": { "name": "Assigned Number", "required": true, "min_len": 1, "max_len": 6 }
+      }
+    },
+    "EC": {
+      "name": "Employment Class",
+      "elements": {
+        "01": { "name": "Employment Class Code", "required": true, "min_len": 2, "max_len": 3 },
+        "02": { "name": "Employment Class Code 2", "min_len": 2, "max_len": 3 },
+        "03": { "name": "Employment Class Code 3", "min_len": 2, "max_len": 3 }
+      },
+      "employment_class_codes": {
+        "01": "Union",
+        "02": "Non-Union",
+        "03": "Executive",
+        "04": "Non-Executive",
+        "06": "Salary",
+        "07": "Hourly",
+        "08": "Part-Time",
+        "09": "Full-Time",
+        "10": "Owner",
+        "11": "Salaried — Commissioned",
+        "15": "Non-Owner",
+        "17": "Management",
+        "20": "Staff",
+        "21": "Seasonal",
+        "22": "Temporary"
+      }
+    },
+    "ICM": {
+      "name": "Individual Income",
+      "elements": {
+        "01": { "name": "Frequency Code", "required": true, "len": 1 },
+        "02": { "name": "Monetary Amount", "required": true, "min_len": 1, "max_len": 18 },
+        "03": { "name": "Quantity", "min_len": 1, "max_len": 15 },
+        "04": { "name": "Location Identifier Code", "min_len": 1, "max_len": 30 },
+        "05": { "name": "Salary Grade", "min_len": 1, "max_len": 5 }
+      },
+      "frequency_codes": {
+        "1": "Weekly",
+        "2": "Biweekly",
+        "3": "Semi-Monthly",
+        "4": "Monthly",
+        "6": "Daily",
+        "7": "Annual",
+        "8": "Two Calendar Months",
+        "9": "Lump-Sum — Separation Payment",
+        "B": "Bi-Monthly",
+        "C": "Per Completion",
+        "H": "Hourly",
+        "Q": "Quarterly",
+        "S": "Semi-Annual",
+        "U": "Unknown"
+      }
+    },
+    "AMT": {
+      "name": "Monetary Amount Information",
+      "elements": {
+        "01": { "name": "Amount Qualifier Code", "required": true, "min_len": 1, "max_len": 3 },
+        "02": { "name": "Monetary Amount", "required": true, "min_len": 1, "max_len": 18 },
+        "03": { "name": "Credit/Debit Flag Code", "len": 1 }
+      },
+      "qualifier_codes": {
+        "B9": "Co-insurance — Actual",
+        "C1": "Copayment Amount",
+        "D": "Discount Amount",
+        "D2": "Deductible Amount",
+        "EBA": "Spending Account Remaining Balance",
+        "FK": "Limit Remaining",
+        "P3": "Premium Amount",
+        "R": "Rate Amount",
+        "T": "Tax",
+        "T3": "Current Period Rate"
+      }
+    },
+    "LUI": {
+      "name": "Language Use",
+      "elements": {
+        "01": { "name": "Identification Code Qualifier", "min_len": 1, "max_len": 2 },
+        "02": { "name": "Language Code", "min_len": 2, "max_len": 80 },
+        "03": { "name": "Language Description", "min_len": 1, "max_len": 80 },
+        "04": { "name": "Language Use Indicator", "len": 1 },
+        "05": { "name": "Language Proficiency Indicator", "len": 1 }
+      },
+      "use_indicator_codes": {
+        "5": "Native Language",
+        "6": "Correspondence Language",
+        "7": "Speech Language"
+      }
+    },
+    "DSB": {
+      "name": "Disability Information",
+      "elements": {
+        "01": { "name": "Disability Type Code", "required": true, "len": 1 },
+        "02": { "name": "Quantity", "min_len": 1, "max_len": 15 },
+        "03": { "name": "Occupation Code", "min_len": 4, "max_len": 6 },
+        "04": { "name": "Work Intensity Code", "len": 1 },
+        "07": { "name": "Product/Service ID Qualifier", "min_len": 2, "max_len": 2 },
+        "08": { "name": "Diagnosis Code", "min_len": 1, "max_len": 30 }
+      },
+      "disability_type_codes": {
+        "1": "Short-Term Disability",
+        "2": "Long-Term Disability",
+        "3": "No Disability",
+        "4": "Permanent Partial Disability"
+      }
+    },
+    "COB": {
+      "name": "Coordination of Benefits",
+      "elements": {
+        "01": { "name": "Payer Responsibility Sequence Number Code", "len": 1 },
+        "02": { "name": "Reference Identification", "min_len": 1, "max_len": 50 },
+        "03": { "name": "Coordination of Benefits Code", "len": 1 },
+        "04": { "name": "Service Type Code", "min_len": 1, "max_len": 2 }
+      },
+      "payer_responsibility_codes": {
+        "P": "Primary",
+        "S": "Secondary",
+        "T": "Tertiary",
+        "U": "Unknown"
+      },
+      "cob_codes": {
+        "1": "Coordination of Benefits",
+        "5": "Unknown",
+        "6": "No Coordination of Benefits"
+      }
+    },
+    "LS": {
+      "name": "Loop Header",
+      "elements": {
+        "01": { "name": "Loop Identifier Code", "required": true, "min_len": 1, "max_len": 4 }
+      }
+    },
+    "LE": {
+      "name": "Loop Trailer",
+      "elements": {
+        "01": { "name": "Loop Identifier Code", "required": true, "min_len": 1, "max_len": 4 }
+      }
+    },
+    "SE": {
+      "name": "Transaction Set Trailer",
+      "elements": {
+        "01": { "name": "Number of Included Segments", "required": true, "min_len": 1, "max_len": 10 },
+        "02": { "name": "Transaction Set Control Number", "required": true, "min_len": 4, "max_len": 9 }
+      }
+    },
+    "GE": {
+      "name": "Functional Group Trailer",
+      "elements": {
+        "01": { "name": "Number of Transaction Sets Included", "required": true, "min_len": 1, "max_len": 6 },
+        "02": { "name": "Group Control Number", "required": true, "min_len": 1, "max_len": 9 }
+      }
+    },
+    "IEA": {
+      "name": "Interchange Control Trailer",
+      "elements": {
+        "01": { "name": "Number of Included Functional Groups", "required": true, "min_len": 1, "max_len": 5 },
+        "02": { "name": "Interchange Control Number", "required": true, "len": 9 }
+      }
+    }
+  }
+}
