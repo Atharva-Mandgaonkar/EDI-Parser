@@ -1,0 +1,9 @@
+# Environments
+.env
+
+# Typical Python virtualenv
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+.pytest_cache/
