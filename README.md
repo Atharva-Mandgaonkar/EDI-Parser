@@ -26,7 +26,7 @@ A full-stack **US Healthcare EDI Parser and Validator** that processes X12 files
 - **Frontend:** HTML, CSS, JavaScript / React  
 - **Backend:** Python (Flask / FastAPI)  
 - **Parsing Logic:** Custom X12 parser
-- **Deployment:** Vercel  
+- **Deployment:** Vercel and Render
 
 ---
 
